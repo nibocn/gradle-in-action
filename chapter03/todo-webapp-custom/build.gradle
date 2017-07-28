@@ -1,0 +1,56 @@
+plugins {
+    id 'idea'
+    id 'eclipse'
+    id 'java'
+    id 'war'
+    id 'org.akhikhl.gretty' version '2.0.0'
+}
+
+group 'me.nibo.todo'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+// region 自定义 war 插件
+webAppDirName = 'webfiles'
+
+war {
+    from 'static'
+}
+// endregion
+
+dependencies {
+    runtime 'javax.servlet:jstl:1.2',
+            'taglibs:standard:1.1.2'
+
+    providedCompile 'javax.servlet:servlet-api:2.5',
+            'javax.servlet.jsp:jsp-api:2.1'
+
+    testCompile 'junit:junit:4.12'
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+gretty {
+    contextPath = '/todo'
+    // 设置 gretty 插件加载静态资源的路径
+    extraResourceBase "${project.projectDir}/static"
+}
+
+idea {
+    module {
+        // 禁止在 IDEA 中自动下载 Javadoc、Source code
+        downloadJavadoc = false
+        downloadSources = false
+    }
+}
+
+eclipse {
+    classpath {
+        // 禁止在 Eclipse 中自动下载 Source code
+        downloadSources = false
+    }
+}
