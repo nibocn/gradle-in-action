@@ -15,4 +15,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'listing_04_01_gradle_properties'
+rootProject.name = 'listing_04_01_other_properties'
