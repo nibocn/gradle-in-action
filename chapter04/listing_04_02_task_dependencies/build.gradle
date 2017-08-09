@@ -1,0 +1,27 @@
+version = '0.1-SNAPSHOT'
+
+task first {
+    doLast {
+        println "first"
+    }
+}
+
+task second {
+    doLast {
+        println "second"
+    }
+}
+
+task printVersion(dependsOn: [second, first]) {
+    doLast {
+        logger.quiet "Version: $version"
+    }
+}
+
+task third {
+    doLast {
+        println "third"
+    }
+}
+
+third.dependsOn("printVersion")
