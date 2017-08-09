@@ -1,0 +1,13 @@
+assert project.exampleProp == 'myValue'
+assert exampleProp == 'myValue'
+
+task printGradleProperty {
+    doLast {
+        println "Second property: $someOtherProp"
+        println "project property: $myProp"
+        println "project property: $project.myProp"
+        println "system property: " + System.properties['mySysProp']
+        println "system property: ${System.properties['mySysProp']}"
+        println "system property: ${System.getProperty('mySysProp', 'aaaa')}"
+    }
+}
