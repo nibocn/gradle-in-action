@@ -30,8 +30,8 @@ task printVersion(group: "versioning", description: "Prints project version.") {
 }
 
 task makeReleaseVersion(group: "versioning", description: "Makes project a release version.") {
-    version.release = true
     doLast {
+        version.release = true
         ant.propertyfile(file: versionFile) {
             entry(key: 'release', type: 'string', operation: '=', value: 'true')
         }
