@@ -15,4 +15,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'listing_05_09-custom-maven-repositor'
+rootProject.name = 'listing_05_09-custom-maven-repository'
