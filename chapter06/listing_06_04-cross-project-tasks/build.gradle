@@ -1,0 +1,92 @@
+plugins {
+    id 'org.akhikhl.gretty' version '2.0.0' apply false
+}
+
+ext.projectIds = ['group': 'me.nibo.todo', 'version': '0.1']
+
+group = projectIds.group
+version = projectIds.version
+
+task hello {
+    doLast {
+        println 'Hello from root project.'
+    }
+}
+
+project(':model') {
+    group = projectIds.group
+    version = projectIds.version
+
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    apply plugin: 'java'
+
+    task hello {
+        doLast {
+            println 'Hello from model project.'
+        }
+    }
+}
+
+project(':repository') {
+    group = projectIds.group
+    version = projectIds.version
+
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    apply plugin: 'java'
+
+    dependencies {
+        compile project(':model')
+    }
+
+    task hello {
+        doLast {
+            println 'Hello from repository project.'
+        }
+    }
+}
+
+project(':web') {
+    group = projectIds.group
+    version = projectIds.version
+
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    apply plugin: 'java'
+    apply plugin: 'war'
+    apply plugin: 'org.akhikhl.gretty'
+
+    task hello {
+        doLast {
+            println 'Hello from web project'
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compile project(':repository')
+        runtime 'javax.servlet:jstl:1.2'
+        providedCompile 'javax.servlet:servlet-api:2.5'
+    }
+
+    gretty {
+        contextPath = '/todo'
+    }
+
+    idea {
+        module {
+            downloadSources = false
+        }
+    }
+
+    eclipse {
+        classpath {
+            downloadSources = false
+        }
+    }
+}
+
