@@ -1,0 +1,30 @@
+plugins {
+    id 'org.akhikhl.gretty' version '2.0.0' apply false
+}
+
+allprojects {
+    group = 'me.nibo.todo'
+    version = '0.1'
+}
+
+subprojects {
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+
+    idea {
+        module {
+            downloadSources = false
+        }
+    }
+
+    eclipse {
+        classpath {
+            downloadSources = false
+        }
+    }
+}
