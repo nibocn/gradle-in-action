@@ -1,0 +1,6 @@
+test.useTestNG()
+
+dependencies {
+    compile project(':model')
+    testCompile 'org.testng:testng:6.11'
+}
