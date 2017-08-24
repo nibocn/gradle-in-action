@@ -1,0 +1,25 @@
+dependencies {
+    compile project(':model')
+    testCompile 'junit:junit:4.12'
+}
+
+test {
+    testLogging {
+        events 'started', 'passed', 'skipped', 'failed'
+        // forked 测试进程中执行测试类的最大数量
+        forkEvery = 2
+        println "availableProcessors: ${Runtime.runtime.availableProcessors()}"
+        // fork 测试进程的最大数量
+        maxParallelForks = ((Runtime.runtime.availableProcessors() / 2) < 1 ? 1 : Runtime.runtime.availableProcessors() / 2)
+
+        // 统计单元测试结果
+        afterSuite { desc, result ->
+            if (!desc.parent) {
+                println "Test Results: ${result.resultType} (${result.testCount} tests, " +
+                        "${result.successfulTestCount} successes, " +
+                        "${result.failedTestCount} failures, " +
+                        "${result.skippedTestCount} skipped)"
+            }
+        }
+    }
+}
