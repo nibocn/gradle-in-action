@@ -1,0 +1,11 @@
+dependencies {
+    compile project(':model')
+    testCompile 'junit:junit:4.12'
+}
+
+test {
+    testLogging {
+        // 当单元测试执行失败时打印出完整的异常跟踪信息
+        exceptionFormat 'full'
+    }
+}
