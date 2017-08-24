@@ -1,0 +1,18 @@
+apply plugin: 'announce'
+
+dependencies {
+    compile project(':model')
+    testCompile 'junit:junit:4.12'
+}
+
+test.afterSuite { TestDescriptor suite, TestResult result ->
+    if (!suite.parent && result.getTestCount() > 0) {
+        long elapsedTestTime = result.getEndTime() - result.getStartTime()
+        println """Elapsed time for execution of
+                   ${result.getTestCount()} test(s):
+                   $elapsedTestTime ms."""
+        announce.announce("""Elapsed time for execution of 
+                            ${result.getTestCount()} test(s):
+                            $elapsedTestTime ms""", 'local')
+    }
+}
