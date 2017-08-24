@@ -1,0 +1,47 @@
+apply plugin: 'announce'
+
+dependencies {
+    compile project(':model')
+    testCompile 'junit:junit:4.12'
+}
+
+test.addTestListener(new NotificationTestListener(project))
+
+
+class NotificationTestListener implements TestListener {
+
+    final Project project
+
+    NotificationTestListener(Project project) {
+        this.project = project
+    }
+
+    @Override
+    void beforeSuite(TestDescriptor testDescriptor) {
+
+    }
+
+    @Override
+    void afterSuite(TestDescriptor suite, TestResult result) {
+        if (!suite.parent && result.getTestCount() > 0) {
+            long elapsedTestTime = result.getEndTime() - result.getStartTime()
+            println """Elapsed time for exceution of
+                                        ${result.getTestCount()} test(s):
+                                        $elapsedTestTime ms."""
+
+            project.announce.announce("""Elapsed time for exceution of
+                                        ${result.getTestCount()} test(s):
+                                        $elapsedTestTime ms.""", 'local')
+        }
+    }
+
+    @Override
+    void beforeTest(TestDescriptor testDescriptor) {
+
+    }
+
+    @Override
+    void afterTest(TestDescriptor testDescriptor, TestResult testResult) {
+
+    }
+}
