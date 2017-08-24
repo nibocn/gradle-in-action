@@ -1,0 +1,10 @@
+dependencies {
+    compile project(':model')
+    testCompile 'junit:junit:4.12'
+}
+
+test {
+    systemProperty 'items', 20
+    systemProperty 'name', '小明'
+    jvmArgs '-Xms128m', '-Xmx256m', '-XX:MaxPermSize=128m'
+}
