@@ -1,0 +1,13 @@
+dependencies {
+    compile project(':model')
+    testCompile 'junit:junit:4.12'
+}
+
+test {
+    systemProperty 'items', 20
+    systemProperty 'name', '小明'
+
+    testLogging {
+        showStandardStreams = true
+    }
+}
