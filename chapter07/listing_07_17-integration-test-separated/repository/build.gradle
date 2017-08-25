@@ -1,0 +1,56 @@
+apply from: 'databaseSetup.gradle'
+
+dependencies {
+    compile project(':model')
+    runtime 'com.h2database:h2:1.4.196'
+    testCompile 'junit:junit:4.12'
+}
+
+sourceSets {
+    integrationTest {
+        java.srcDir file('src/integTest/java')
+        resources.srcDir file('src/integTest/resources')
+        compileClasspath = sourceSets.main.output + configurations.testRuntime
+        println "sourceSets.main.output: $sourceSets.main.output.asPath \n"
+        println "configurations.testRuntime: $configurations.testRuntime.asPath \n"
+        println "compileClasspath: $compileClasspath.asPath \n"
+        runtimeClasspath = output + compileClasspath
+
+        println "\n"
+        println "output: $output.asPath \n"
+        println "compileClasspath: $compileClasspath.asPath \n"
+        println "runtimeClasspath: $runtimeClasspath.asPath"
+    }
+}
+
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat 'full'
+    }
+}
+
+test {
+    exclude '**/*IntegTest.class'
+    reports.html.setDestination(file("$reports.html.destination/unit"))
+    reports.junitXml.setDestination(file("$reports.junitXml.destination/unit"))
+}
+
+task integrationTest(type: Test) {
+    group = 'verification'
+    description = 'Runs the integration tests.'
+    println "\n\n sourceSets.integrationTest.output.classesDirs: $sourceSets.integrationTest.output.classesDirs.asPath \n"
+    testClassesDirs = files(sourceSets.integrationTest.output.classesDirs)
+    println "sourceSets.integrationTest.runtimeClasspath: $sourceSets.integrationTest.runtimeClasspath.asPath"
+    classpath = sourceSets.integrationTest.runtimeClasspath
+
+    include '**/*IntegTest.class'
+
+    reports {
+        html.setDestination(file("$reports.html.destination/integration"))
+        junitXml.setDestination(file("$reports.junitXml.destination/integration"))
+    }
+    dependsOn startAndPrepareDatabase
+    finalizedBy stopDatabase
+}
+
+check.dependsOn integrationTest
