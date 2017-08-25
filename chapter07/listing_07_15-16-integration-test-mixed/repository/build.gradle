@@ -1,0 +1,35 @@
+apply from: 'databaseSetup.gradle'
+
+dependencies {
+    compile project(':model')
+    runtime 'com.h2database:h2:1.4.196'
+    testCompile 'junit:junit:4.12'
+}
+
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat 'full'
+    }
+}
+
+test {
+    exclude '**/*IntegTest.class'
+    reports.html.setDestination(file("$reports.html.destination/unit"))
+    reports.junitXml.setDestination(file("$reports.junitXml.destination/unit"))
+}
+
+task integrationTest(type: Test) {
+    group = 'verification'
+    description = 'Runs the integration tests.'
+    include '**/*IntegTest.class'
+    reports {
+        html.setDestination(file("$reports.html.destination/integration"))
+        junitXml.setDestination(file("$reports.junitXml.destination/integration"))
+    }
+    dependsOn startAndPrepareDatabase
+    finalizedBy stopDatabase
+}
+
+check.dependsOn integrationTest
+
+
