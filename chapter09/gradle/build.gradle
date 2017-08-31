@@ -1,0 +1,30 @@
+ant.importBuild '../ant/build.xml'
+
+[init, compile, dist, clean]*.logging*.level = LogLevel.INFO
+
+init {
+    doFirst {
+        logger.quiet "Deleting the directory '${ant.properties.build}'."
+    }
+    doLast {
+        logger.quiet "Starting from a clean slate."
+    }
+}
+
+ext.antBuildDir = '../ant/build'
+ant.properties.build = "$antBuildDir/classs"
+ant.properties.dist = "$antBuildDir/libs"
+
+task sourcesJar(type: Jar) {
+    baseName = 'my-app'
+    classifier = 'sources'
+    version = ant.properties.version
+    destinationDir = file(ant.properties.dist)
+    from new File(ant.properties.src, 'main/java')
+}
+
+dist.dependsOn sourcesJar
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.1'
+}
