@@ -1,0 +1,62 @@
+ant.importBuild '../ant/build.xml'
+
+configurations {
+    antCompile
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    antCompile 'org.apache.commons:commons-lang3:3.6'
+}
+
+[init, compile, dist, clean]*.logging*.level = LogLevel.INFO
+
+init {
+    doFirst {
+        logger.quiet "Deleting the directory '${ant.properties.build}'."
+    }
+    doLast {
+        logger.quiet "Starting from a clean slate."
+    }
+}
+
+ext.antBuildDir = '../ant/build'
+ant.properties.build = "$antBuildDir/classes"
+ant.properties.dist = "$antBuildDir/libs"
+
+task sourcesJar(type: Jar) {
+    baseName = 'my-app'
+    classifier = 'sources'
+    version = ant.properties.version
+    destinationDir = file(ant.properties.dist)
+    from new File(ant.properties.src, 'main/java')
+}
+
+dist.dependsOn sourcesJar
+
+task downloadReleaseDocumentation {
+    logging.level = LogLevel.INFO
+    ext.repoUrl = 'https://docs.gradle.org/4.1'
+    doLast {
+        ant.get(dest: ant.properties.build) {
+            url(url: "$repoUrl/userguide/userguide.html")
+            url(url: "$repoUrl/release-notes")
+        }
+    }
+}
+
+dist.dependsOn downloadReleaseDocumentation
+
+compile {
+    inputs.dir file(ant.properties.src)
+    outputs.dir file(ant.properties.build)
+}
+
+ant.properties.antCompilepath = configurations.antCompile.asPath
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.1'
+}
