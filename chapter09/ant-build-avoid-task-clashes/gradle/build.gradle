@@ -1,0 +1,13 @@
+apply plugin: 'java'
+
+ext.importedAntBuildFile = 'importedAntBuild.gradle'
+
+task cleanAnt(type: GradleBuild) {
+    buildFile = importedAntBuildFile
+    tasks = ['clean']
+}
+
+task distAnt(type: GradleBuild) {
+    buildFile = importedAntBuildFile
+    tasks = ['dist']
+}
