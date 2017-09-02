@@ -1,0 +1,26 @@
+apply plugin: 'war'
+
+configurations {
+    provided
+    testProvided.extendsFrom provided
+}
+
+sourceSets {
+    main {
+        compileClasspath += configurations.provided
+    }
+
+    test {
+        compileClasspath += configurations.testProvided
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // 测试 provided 作用域的配置是否生效，通过查看生成的 war 文件
+    // lib 目录下是否存在 servlet-api-2.5.jar 文件
+    provided 'javax.servlet:servlet-api:2.5'
+}
