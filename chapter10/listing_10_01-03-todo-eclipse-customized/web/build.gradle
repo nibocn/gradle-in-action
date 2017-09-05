@@ -1,0 +1,74 @@
+apply plugin: 'war'
+apply plugin: 'org.akhikhl.gretty'
+apply plugin: 'groovy'
+
+configurations {
+    functTestCompile.extendsFrom testCompile
+    functTestRuntime.extendsFrom testRuntime
+}
+
+ext.seleniumGroup = 'org.seleniumhq.selenium'
+ext.seleniumVersion = '2.32.0'
+
+sourceSets {
+    functionalTest {
+        groovy.srcDir file('src/functTest/groovy')
+        resources.srcDir file('src/functTest/resources')
+
+        compileClasspath = sourceSets.main.output + configurations.functTestCompile
+        runtimeClasspath = output + compileClasspath + configurations.functTestRuntime
+    }
+}
+
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat 'full'
+    }
+}
+
+dependencies {
+    compile project(':repository')
+    runtime 'javax.servlet:jstl:1.2'
+    providedCompile 'javax.servlet:servlet-api:2.5'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.codehaus.groovy:groovy:2.4.7'
+    functTestCompile 'org.codehaus.geb:geb-junit4:0.7.2'
+    functTestCompile "$seleniumGroup:selenium-api:$seleniumVersion"
+    functTestRuntime "$seleniumGroup:selenium-firefox-driver:$seleniumVersion"
+}
+
+gretty {
+    contextPath = '/todo'
+    // gretty 只需要配置集成测试或功能测试时的任务名即可
+    // http://akhikhl.github.io/gretty-doc/Integration-tests-support.html
+    integrationTestTask = 'functionalTest'
+}
+
+task functionalTest(type: Test) {
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    classpath = sourceSets.functionalTest.runtimeClasspath
+    reports {
+        html.setDestination file("$reports.html.destination/funcational")
+        junitXml.setDestination file("$reports.junitXml.destination/funcational")
+    }
+
+    systemProperty 'geb.env', 'firefox'
+    systemProperty 'geb.build.reportsDir', reporting.file("$name/geb")
+}
+
+check.dependsOn functionalTest
+
+eclipse {
+    project {
+        comment = 'Web components for managing To Do items in the brower'
+    }
+    classpath {
+        plusConfigurations << configurations.functTestCompile
+        plusConfigurations << configurations.functTestRuntime
+    }
+    wtp {
+        component {
+            contextPath = 'todo'
+        }
+    }
+}
