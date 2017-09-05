@@ -6,3 +6,8 @@ out/
 .gradle/
 *.iml
 .gradletasknamecache
+
+# Eclipse
+.settings/
+.project
+.classpath
