@@ -1,13 +1,22 @@
+# macOS
 .DS_Store
-.idea/
+
+# Gradle
 build/
-dist/
-out/
 .gradle/
-*.iml
 .gradletasknamecache
+
+# IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
 
 # Eclipse
 .settings/
 .project
 .classpath
+
+# Other
+dist/
