@@ -1,0 +1,25 @@
+import me.nibo.todo.js.GoogleClosureMinifier
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    googleClosure
+}
+
+dependencies {
+    googleClosure 'com.google.javascript:closure-compiler:v20170806'
+}
+
+ext {
+    jsSourceDir = "$webAppDir/js/app"
+    jsOutputDir = "$buildDir/js"
+}
+
+def jsSourceFiles = fileTree(jsSourceDir).include('*.js')
+
+task minifyJs(type: GoogleClosureMinifier) {
+    inputFiles = jsSourceFiles
+    outputFile = file("$jsOutputDir/all-mini.js")
+}
