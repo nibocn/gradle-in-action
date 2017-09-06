@@ -1,0 +1,35 @@
+apply plugin: 'war'
+apply plugin: 'org.akhikhl.gretty'
+
+repositories {
+    ivy {
+        name 'JQuery'
+        url 'http://code.jquery.com'
+        layout 'pattern', {
+            artifact '[module]-[revision](.[classifier]).[ext]'
+
+        }
+    }
+}
+
+configurations {
+    jquery
+}
+
+dependencies {
+    compile project(':repository')
+    runtime 'javax.servlet:jstl:1.2'
+    providedCompile 'javax.servlet:servlet-api:2.5'
+    jquery group: 'jquery', name: 'jquery', version: '1.10.0', classifier: 'min', ext: 'js'
+}
+
+gretty {
+    contextPath = '/todo'
+}
+
+task fetchExternalJs(type: Copy) {
+    from configurations.jquery
+    into "$webAppDir/js/ext"
+}
+
+war.dependsOn fetchExternalJs
