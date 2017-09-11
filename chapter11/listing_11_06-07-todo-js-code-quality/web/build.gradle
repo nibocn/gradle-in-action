@@ -1,0 +1,14 @@
+apply plugin: 'war'
+apply plugin: 'org.akhikhl.gretty'
+apply from: "$projectDir/gradle/jsDependencies.gradle"
+apply from: "$projectDir/gradle/jsCodeQuality.gradle"
+
+dependencies {
+    compile project(':repository')
+    runtime 'javax.servlet:jstl:1.2'
+    providedCompile 'javax.servlet:servlet-api:2.5'
+}
+
+gretty {
+    contextPath = '/todo'
+}
