@@ -1,0 +1,35 @@
+allprojects {
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+
+    group = 'me.nibo.todo'
+    version = '0.1'
+
+    idea {
+        module {
+            downloadSources = false
+            downloadJavadoc = false
+        }
+    }
+
+    eclipse {
+        classpath {
+            downloadSources = false
+            downloadJavadoc = false
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+
+    tasks.withType(Test) {
+        testLogging {
+            exceptionFormat 'full'
+        }
+    }
+}

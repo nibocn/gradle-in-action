@@ -1,0 +1,13 @@
+plugins {
+    id 'groovy'
+}
+
+sourceSets.main.java.srcDirs = []
+sourceSets.main.groovy.srcDirs = ['src/main/java', 'src/main/groovy']
+
+dependencies {
+    compile project(':model')
+    compile 'org.codehaus.groovy:groovy-all:2.4.12'
+    runtime 'com.h2database:h2:1.4.196'
+    testCompile 'junit:junit:4.12'
+}
