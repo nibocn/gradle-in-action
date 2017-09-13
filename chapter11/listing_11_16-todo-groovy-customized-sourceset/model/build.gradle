@@ -1,0 +1,21 @@
+plugins {
+    id 'groovy'
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.12'
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src/groovy']
+        }
+    }
+
+    test {
+        groovy {
+            srcDirs = ['test/groovy']
+        }
+    }
+}
