@@ -1,0 +1,5 @@
+apply plugin: 'jacoco'
+
+jacocoTestReport {
+    executionData = fileTree(dir: 'build/jacoco', include: '**/*.exec')
+}
