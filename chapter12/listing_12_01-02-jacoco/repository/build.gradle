@@ -1,0 +1,35 @@
+apply from: 'databaseSetup.gradle'
+apply from: "$rootDir/gradle/jacoco.gradle"
+
+dependencies {
+    compile project(':model')
+    runtime 'com.h2database:h2:1.4.196'
+    testCompile 'junit:junit:4.12'
+}
+
+sourceSets {
+    integrationTest {
+        java.srcDir file('src/integTest/java')
+        resources.srcDir file('src/integTest/resources')
+        compileClasspath = sourceSets.main.output + configurations.testRuntime
+        runtimeClasspath = output + compileClasspath
+    }
+}
+
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat 'full'
+    }
+}
+
+task integrationTest(type: Test) {
+    group = 'verification'
+    description = 'Runs the integration tests.'
+    testClassesDirs = files(sourceSets.integrationTest.output.classesDirs)
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+startDatabase.dependsOn test
+integrationTest.dependsOn startAndPrepareDatabase
+stopDatabase.dependsOn integrationTest
+check.dependsOn stopDatabase
