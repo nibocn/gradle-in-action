@@ -1,0 +1,20 @@
+apply plugin: 'checkstyle'
+
+ext.checkstyleDir = "$rootDir/config/checkstyle"
+
+checkstyle {
+    configFile = file("$checkstyleDir/checkstyle.xml")
+    // 忽略 checkstyle 检查出的错误，避免构建失败
+    ignoreFailures = true
+    // 构建过程中不显示 checkstyle 检查出错误
+    showViolations = false
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        // more see https://github.com/checkstyle/contribution/tree/master/xsl
+//        html.stylesheet resources.text.fromFile("$checkstyleDir/checkstyle-noframes-sorted.xsl")
+//        html.stylesheet resources.text.fromFile("$rootDir/config/xsl/checkstyle-noframes.xsl")
+//        html.stylesheet resources.text.fromFile("$rootDir/config/xsl/checkstyle-author.xsl")
+    }
+}
