@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC
+        "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+        "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+<module name="Checker">
+
+
+    <!-- 设置CheckStyle的提示级别为警告 -->
+    <!--<property name="severity" value="Error"/>-->
+    <property name="charset" value="UTF-8"/>
+    <module name="SuppressionCommentFilter"/>
+    <!--<module name="SuppressionCommentFilter">-->
+    <!--<property name="offCommentFormat" value="CHECKSTYLE.OFF\: ([\w\|]+)"/>-->
+    <!--<property name="onCommentFormat" value="CHECKSTYLE.ON\: ([\w\|]+)"/>-->
+    <!--<property name="checkFormat" value="$1"/>-->
+    <!--</module>-->
+
+    <module name="SuppressWarningsFilter"/>
+
+    <module name="TreeWalker">
+
+        <module name="FileContentsHolder"/>
+        <module name="SuppressWarningsHolder"/>
+        <!-- 长度方面的检查 -->
+        <!-- 每行不超过100个字 -->
+        <module name="LineLength">
+            <property name="max" value="100"/>
+        </module>
+        <!-- 方法体不超过60行 -->
+        <module name="MethodLength">
+            <!-- 统计时是否包括空行和以//开始的注释,缺省为统计(true)-->
+            <property name="countEmpty" value="false"/>
+            <property name="tokens" value="METHOD_DEF"/>
+            <property name="max" value="30"/>
+        </module>
+        <!-- 方法的参数个数不超过7个 -->
+        <module name="ParameterNumber">
+            <property name="max" value="7"/>
+        </module>
+
+        <!-- javadoc的检查 -->
+        <!-- 检查所有的interface和class -->
+        <module name="JavadocType"/>
+        <!-- 检查所有方法的javadoc，可以不声明RuntimeException -->
+        <module name="JavadocMethod">
+            <property name="allowUndeclaredRTE" value="true"/>
+        </module>
+        <!-- 检查某个变量的javadoc -->
+        <module name="JavadocVariable"/>
+
+        <!-- 命名方面的检查,使用了Checkstyle默认的规则 -->
+        <!-- 类名 (class 或interface) 的检查 -->
+        <module name="TypeName"/>
+        <!-- 方法名的检查 -->
+        <module name="MethodName"/>
+        <!-- 方法的参数名 -->
+        <module name="ParameterName "/>
+        <!-- 变量的检查 -->
+        <module name="MemberName"/>
+        <!-- 常量名的检查 -->
+        <module name="ConstantName"/>
+
+        <!-- 多余的关键字 -->
+        <module name="RedundantModifier"/>
+
+        <!-- 对区域的检查 -->
+        <!-- 不能出现空白区域 -->
+        <module name="EmptyBlock"/>
+        <!-- 所有区域都要使用大括号。 -->
+        <module name="NeedBraces"/>
+        <!-- 多余的括号 -->
+        <module name="AvoidNestedBlocks">
+            <property name="allowInSwitchCase" value="true"/>
+        </module>
+
+        <!-- 编码方面的检查 -->
+        <!-- 不能用魔法数 -->
+        <module name="MagicNumber"/>
+        <!-- if最多嵌套3层 -->
+        <module name="NestedIfDepth">
+            <property name="max" value="3"/>
+        </module>
+        <!-- 检查多于的导入,如一个类导入了多次 -->
+        <module name="RedundantImport"/>
+        <!-- 检查没有使用的导入 -->
+        <module name="UnusedImports"/>
+    </module>
+
+    <!-- 每个文件行数最大为1500行 -->
+    <module name="FileLength">
+        <property name="max" value="1500"/>
+    </module>
+
+    <!-- 重复代码的检查,超过8行就认为重复,UTF-8格式 -->
+    <!--<module name="StrictDuplicateCode">-->
+    <!--<property name="min" value="8" />-->
+    <!--<property name="charset" value="UTF-8" />-->
+    <!--</module>-->
+
+    <!-- 使用System.out.println等进行打印操作 -->
+    <module name="RegexpMultiline">
+        <property name="format" value="System\.(out)|(err)\.print(ln)?\("/>
+        <property name="message" value="不能使用print或println进行打印!"/>
+    </module>
+
+    <!-- 异常等信息直接使用printStackTrace进行打印 -->
+    <module name="RegexpMultiline">
+        <property name="format" value="printStackTrace?\("/>
+        <property name="message" value="can't printStackTracet."/>
+    </module>
+
+</module>
