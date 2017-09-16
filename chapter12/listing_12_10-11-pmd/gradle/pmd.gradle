@@ -1,0 +1,8 @@
+apply plugin: 'pmd'
+pmd {
+    ignoreFailures = true
+    ruleSets = [
+            "java-basic",
+            "java-braces"
+    ]
+}
