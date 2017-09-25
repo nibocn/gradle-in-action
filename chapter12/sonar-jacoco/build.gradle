@@ -1,0 +1,33 @@
+plugins {
+    id 'org.sonarqube' version '2.5' apply false
+}
+
+allprojects {
+    group = 'me.nibo.todo'
+    version = '0.1'
+}
+
+subprojects {
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    apply plugin: 'java'
+    apply plugin: 'org.sonarqube'
+
+    apply from: "$rootDir/gradle/jacoco.gradle"
+
+    repositories {
+        mavenCentral()
+    }
+
+    idea {
+        module {
+            downloadSources = false
+        }
+    }
+
+    eclipse {
+        classpath {
+            downloadSources = false
+        }
+    }
+}

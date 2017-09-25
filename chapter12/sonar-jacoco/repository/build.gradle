@@ -1,0 +1,42 @@
+apply from: 'databaseSetup.gradle'
+
+dependencies {
+    compile project(':model')
+    runtime 'com.h2database:h2:1.4.196'
+    testCompile 'junit:junit:4.12'
+}
+
+sourceSets {
+    integrationTest {
+        java.srcDir file('src/integrationTest/java')
+        resources.srcDir file('src/integrationTest/resources')
+        compileClasspath = sourceSets.main.output + configurations.testRuntime
+        runtimeClasspath = output + compileClasspath
+    }
+}
+
+tasks.withType(Test) {
+    testLogging {
+        exceptionFormat 'full'
+    }
+}
+
+task integrationTest(type: Test) {
+    group = 'verification'
+    description = 'Runs the integration tests.'
+    testClassesDirs = files(sourceSets.integrationTest.output.classesDirs)
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+startDatabase.dependsOn test
+integrationTest.dependsOn startAndPrepareDatabase
+stopDatabase.dependsOn integrationTest
+check.dependsOn stopDatabase
+
+sonarqube {
+
+    properties {
+//        property "sonar.tests", "src/test, src/integTest"
+        properties["sonar.tests"] += sourceSets.integrationTest.allSource.srcDirs
+    }
+}
