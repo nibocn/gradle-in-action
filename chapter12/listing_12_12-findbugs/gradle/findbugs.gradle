@@ -1,0 +1,17 @@
+apply plugin: 'findbugs'
+
+ext.findbugsDir = "$rootDir/config/findbugs"
+
+findbugs {
+    ignoreFailures = true
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled false
+        html.enabled true
+        // see more https://github.com/findbugsproject/findbugs/tree/master/findbugs/src/xsl
+        html.stylesheet resources.text.fromFile("$findbugsDir/color.xsl")
+//        html.stylesheet resources.text.fromFile("$findbugsDir/summary.xsl")
+    }
+}
