@@ -1,0 +1,14 @@
+plugins {
+    id 'war'
+    id 'org.akhikhl.gretty' version '2.0.0'
+}
+
+dependencies {
+    compile project(':repository')
+    runtime 'javax.servlet:jstl:1.2'
+    providedCompile 'javax.servlet:servlet-api:2.5'
+}
+
+gretty {
+    contextPath = '/todo'
+}
