@@ -1,0 +1,28 @@
+allprojects {
+    group = 'me.nibo.todo'
+    version = '0.1'
+}
+
+subprojects {
+    apply plugin: 'idea'
+    apply plugin: 'eclipse'
+    apply plugin: 'java'
+
+    apply from: "$rootDir/gradle/findbugs.gradle"
+
+    repositories {
+        mavenCentral()
+    }
+
+    idea {
+        module {
+            downloadSources = false
+        }
+    }
+
+    eclipse {
+        classpath {
+            downloadSources = false
+        }
+    }
+}
