@@ -1,0 +1,52 @@
+plugins {
+    id 'groovy'
+    id 'distribution'
+}
+
+archivesBaseName = 'cloudbees-plugin'
+group = 'me.nibo.gradle.plugin'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile localGroovy()
+    compile gradleApi()
+    compile 'com.cloudbees:cloudbees-api-client:1.4.0'
+    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+}
+
+task sourceJar(type: Jar) {
+    baseName 'cloudbees-plugin'
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+    baseName 'cloudbees-plugin'
+    classifier 'groovydoc'
+    from groovydoc.destinationDir
+}
+
+artifacts {
+    archives sourceJar
+    archives groovydocJar
+}
+
+distributions {
+    main {
+        baseName = archivesBaseName
+        contents {
+            // 归档 libs 目录下的所有附加包
+//            from { libsDir }
+            // 归档 libs 目录下指定的附加包
+            from(libsDir) {
+                include sourceJar.archiveName
+                include groovydocJar.archiveName
+            }
+
+        }
+    }
+}
