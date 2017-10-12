@@ -39,14 +39,17 @@ distributions {
     main {
         baseName = archivesBaseName
         contents {
-            // 归档 libs 目录下的所有附加包
-//            from { libsDir }
-            // 归档 libs 目录下指定的附加包
+            from { libsDir }
+        }
+    }
+
+    docs {
+        baseName = "$archivesBaseName-docs"
+        contents {
             from(libsDir) {
                 include sourceJar.archiveName
                 include groovydocJar.archiveName
             }
-
         }
     }
 }
