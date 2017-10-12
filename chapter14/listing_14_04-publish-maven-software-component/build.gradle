@@ -1,0 +1,66 @@
+plugins {
+    id 'groovy'
+    id 'distribution'
+    id 'maven-publish'
+}
+
+archivesBaseName = 'cloudbees-plugin'
+group = 'me.nibo.gradle.plugin'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile localGroovy()
+    compile gradleApi()
+    compile 'com.cloudbees:cloudbees-api-client:1.4.0'
+    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+}
+
+task sourceJar(type: Jar) {
+    baseName 'cloudbees-plugin'
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+    baseName 'cloudbees-plugin'
+    classifier 'groovydoc'
+    from groovydoc.destinationDir
+}
+
+artifacts {
+    archives sourceJar
+    archives groovydocJar
+}
+
+distributions {
+    main {
+        baseName = archivesBaseName
+        contents {
+            from { libsDir }
+        }
+    }
+
+    docs {
+        baseName = "$archivesBaseName-docs"
+        contents {
+            from(libsDir) {
+                include sourceJar.archiveName
+                include groovydocJar.archiveName
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        plugin(MavenPublication) {
+            from components.java
+            artifactId 'cloudbees-plugin'
+        }
+
+    }
+}
