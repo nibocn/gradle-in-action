@@ -1,0 +1,4 @@
+mavenNexusReleaseUrl=http://nexus.hanboard.com.cn:81/repository/maven-releases
+maven.nexus.snapshot.url=http://nexus.hanboard.com.cn:81/repository/maven-snapshots
+maven.nexus.username=deployer
+maven.nexus.password=deployer
