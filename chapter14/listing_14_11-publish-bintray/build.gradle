@@ -1,0 +1,127 @@
+plugins {
+    id 'groovy'
+    id 'idea'
+    id 'eclipse'
+    id 'distribution'
+    id 'maven-publish'
+    id "com.jfrog.bintray" version "1.7.3"
+}
+
+archivesBaseName = 'cloudbees-plugin'
+group = 'me.nibo.gradle.plugin'
+version = '1.0'
+//version = '1.0.1-SNAPSHOT'
+
+ext {
+    bintrayBaseUrl = 'https://api.bintray.com/maven/nibo'
+    bintrayRepository = 'gradle-plugins'
+    bintrayPackage = 'gradle-cloudbees-plugin'
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile localGroovy()
+    compile gradleApi()
+    compile 'com.cloudbees:cloudbees-api-client:1.4.0'
+    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+}
+
+task sourceJar(type: Jar) {
+    baseName 'cloudbees-plugin'
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+    baseName 'cloudbees-plugin'
+    classifier 'groovydoc'
+    from groovydoc.destinationDir
+}
+
+idea {
+    module {
+        downloadSources = false
+    }
+}
+
+eclipse {
+    classpath {
+        downloadSources = false
+    }
+}
+
+artifacts {
+    archives sourceJar
+    archives groovydocJar
+}
+
+distributions {
+    main {
+        baseName = archivesBaseName
+        contents {
+            from { libsDir }
+        }
+    }
+
+    docs {
+        baseName = "$archivesBaseName-docs"
+        contents {
+            from(libsDir) {
+                include sourceJar.archiveName
+                include groovydocJar.archiveName
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            artifactId 'cloudbees-plugin'
+            artifact sourceJar
+            artifact groovydocJar
+
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('name', 'Gradle CloudBees plugin')
+                root.appendNode('description', 'Gradle plugin for managing ' +
+                        'applications and databases on CloudBees RUN@cloud.')
+                root.appendNode('inceptionYear', '2017')
+
+                def licenses = root.appendNode('licenses')
+                licenses.appendNode('license')
+                        .appendNode('name', 'The Apache Software License, Version 2.0').parent()
+                        .appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt').parent()
+                        .appendNode('distribution', 'repo')
+
+                def developers = root.appendNode('developers')
+                developers.appendNode('developer')
+                        .appendNode('id', 'Richard').parent()
+                        .appendNode('name', 'Richard Nee').parent()
+                        .appendNode('email', 'nibocn@gmail.com')
+                developers.appendNode('developer')
+                        .appendNode('id', 'Jack').parent()
+                        .appendNode('name', 'Jack Nee').parent()
+                        .appendNode('email', 'jack@gmail.com')
+            }
+        }
+    }
+}
+
+bintray {
+    // 通过 ${HOME}/.gradle/gradle.properties 文件进行配置，避免敏感信息泄露
+    user = bintrayUsername
+    key = bintrayApiKey
+    publications = ['maven']
+    pkg {
+        repo = bintrayRepository
+        name = bintrayPackage
+        userOrg = 'nibo'
+    }
+}
+
