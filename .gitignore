@@ -18,5 +18,9 @@ out/
 .project
 .classpath
 
+#Vagrant
+.vagrant/
+
 # Other
 dist/
+
